@@ -1,0 +1,52 @@
+.user {
+        margin-top: 5px;
+        margin-bottom: 5px;
+}
+
+.description {
+        text-align: left;
+}
+
+h1 {
+        display: block;
+        text-align: left;
+        width: 95%;
+        display: block;
+        margin-top: 0px;
+        margin-left: 20px;
+        margin-bottom: 5px;
+        font-size: 30px;
+}
+
+article h2 {
+        font-size: 30px;
+        margin: 10px auto;
+        padding: 0px;
+}
+
+.guest_icon {
+        display: inline-block;
+        background-image: url("../images/icon_group.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 50px;
+        height: 50px;
+}
+
+.bed_icon {
+        display: inline-block;
+        background-image: url("../images/icon_bed.png");
+        background-repeat: no-repeat;
+        background-position: center;
+    width: 50px;
+    height: 50px;
+}
+
+.bath_icon {
+        display: inline-block;
+        background-image: url("../images/icon_bath.png");
+        background-repeat: no-repeat;
+        background-position: center;
+    width: 50px;
+    height: 50px;
+}
