@@ -2,6 +2,7 @@
 """
 Contains the TestDBStorageDocs and TestDBStorage classes
 """
+
 from datetime import datetime
 import inspect
 import models
@@ -15,73 +16,30 @@ from models.state import State
 from models.user import User
 import json
 import os
-import pycodestyle
+import pep8
 import unittest
 DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "City": City, "Place": Place,
            "Review": Review, "State": State, "User": User}
-storage_t = os.getenv("HBNB_TYPE_STORAGE")
 
 
 class TestDBStorageDocs(unittest.TestCase):
     """Tests to check the documentation and style of DBStorage class"""
     @classmethod
     def setUpClass(cls):
-        """Set up for the doc tests"""
+        """Set up fmeor the doc tests"""
         cls.dbs_f = inspect.getmembers(DBStorage, inspect.isfunction)
 
     def test_pep8_conformance_db_storage(self):
         """Test that models/engine/db_storage.py conforms to PEP8."""
-        pep8s = pycodestyle.StyleGuide(quiet=True)
+        pep8s = pep8.StyleGuide(quiet=True)
         result = pep8s.check_files(['models/engine/db_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
     def test_pep8_conformance_test_db_storage(self):
         """Test tests/test_models/test_db_storage.py conforms to PEP8."""
-        pep8s = pycodestyle.StyleGuide(quiet=True)
-        result = pep8s.check_files(['tests/test_models/test_engine/\
-test_db_storage.py'])
-        self.assertEqual(result.total_errors, 0,
-                         "Found code style errors (and warnings).")
-
-
-# class TestFileStorage(unittest.TestCase):
-#     """Test the FileStorage class"""
-#     @unittest.skipIf(storage_t != 'db', "not testing db storage")
-#     def test_all_returns_dict(self):
-#         """Test that all returns a dictionaty"""
-#         self.assertIs(type(models.storage.all()), dict)
-
-#     @unittest.skipIf(storage_t != 'db', "not testing db storage")
-#     def test_all_no_class(self):
-#         """Test that all returns all rows when no class is passed"""
-
-#     @unittest.skipIf(storage_t != 'db', "not testing db storage")
-#     def test_new(self):
-#         """test that new adds an object to the database"""
-
-#     @unittest.skipIf(storage_t != 'db', "not testing db storage")
-#     def test_save(self):
-#         """Test that save properly saves objects to file.json"""
-
-class TestDBStorageDocs(unittest.TestCase):
-    """Tests to check the documentation and style of DBStorage class"""
-    @classmethod
-    def setUpClass(cls):
-        """Set up for the doc tests"""
-        cls.dbs_f = inspect.getmembers(DBStorage, inspect.isfunction)
-
-    def test_pep8_conformance_db_storage(self):
-        """Test that models/engine/db_storage.py conforms to PEP8."""
-        pep8s = pycodestyle.StyleGuide(quiet=True)
-        result = pep8s.check_files(['models/engine/db_storage.py'])
-        self.assertEqual(result.total_errors, 0,
-                         "Found code style errors (and warnings).")
-
-    def test_pep8_conformance_test_db_storage(self):
-        """Test tests/test_models/test_db_storage.py conforms to PEP8."""
-        pep8s = pycodestyle.StyleGuide(quiet=True)
+        pep8s = pep8.StyleGuide(quiet=True)
         result = pep8s.check_files(['tests/test_models/test_engine/\
 test_db_storage.py'])
         self.assertEqual(result.total_errors, 0,
@@ -99,7 +57,7 @@ test_db_storage.py'])
         self.assertIsNot(DBStorage.__doc__, None,
                          "DBStorage class needs a docstring")
         self.assertTrue(len(DBStorage.__doc__) >= 1,
-                                        "DBStorage class needs a docstring")
+                        "DBStorage class needs a docstring")
 
     def test_dbs_func_docstrings(self):
         """Test for the presence of docstrings in DBStorage methods"""
@@ -112,19 +70,36 @@ test_db_storage.py'])
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
-    @unittest.skipIf(storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
         self.assertIs(type(models.storage.all()), dict)
 
-    @unittest.skipIf(storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
 
-    @unittest.skipIf(storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
         """test that new adds an object to the database"""
 
-    @unittest.skipIf(storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
+    def test_count(self):
+        """ Test for the FS count method
+        """
+        num_states = models.storage.count(State)
+        state = State(name="statey")
+        state.save()
+        self.assertEqual(models.storage.count(State), num_states + 1)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
+    def test_get(self):
+        """ Test for FS get method
+        """
+        state = State(name="PR")
+        state.save()
+        self.assertIs(models.storage.get(State, state.id), state)
